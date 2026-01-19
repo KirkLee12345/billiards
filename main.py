@@ -158,7 +158,7 @@ if __name__ == "__main__":
     ball1x = 350
     ball1y = 350
 
-    balls.append(Ball(color=(255, 255, 255), x=baix, y=baiy))  # 白球，必须放在第一个
+    balls.append(Ball(color=(255, 255, 255), x=baix, y=baiy, number=0))  # 白球，必须放在第一个
 
     balls.append(Ball(color=(210, 233, 3), x=ball1x, y=ball1y, number=1))
 
@@ -188,6 +188,10 @@ if __name__ == "__main__":
     drag_start_pos = None
     drag_current_pos = None
 
+    is_white_ball_in_dong = False
+    is_ball_in_hand = False
+    in_hand_ball = None
+
     running = True
     paused = False
     beisu = 1
@@ -202,14 +206,30 @@ if __name__ == "__main__":
             if i.vx != 0 or i.vy != 0:
                 actionable = False
                 break
+        if actionable:
+            if is_white_ball_in_dong:
+                is_white_ball_in_dong = False
+                wb = None
+                for b in in_dong_balls:
+                    if b.number == 0:
+                        wb = b
+                        break
+                in_dong_balls.remove(wb)
+                balls.insert(0, wb)
+                balls[0].x = baix
+                balls[0].y = baiy
+                balls[0].vx = 0
+                balls[0].vy = 0
+                balls[0].is_in_dong = False
+                paused = True
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and paused:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and paused:
                 paused = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and actionable:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and actionable:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 # 检查是否点击了白球（假设白球是第一个球）
                 white_ball = balls[0]
@@ -218,7 +238,7 @@ if __name__ == "__main__":
                     dragging_ball = white_ball
                     drag_start_pos = (white_ball.x, white_ball.y)
                     drag_current_pos = (mouse_x, mouse_y)
-            elif event.type == pygame.MOUSEBUTTONUP:
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 if dragging_ball and actionable:
                     # 计算击球力度和方向
                     mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -241,6 +261,23 @@ if __name__ == "__main__":
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     drag_current_pos = (mouse_x, mouse_y)
 
+        if actionable:
+            left, middle, right = pygame.mouse.get_pressed()
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if right and not is_ball_in_hand:
+                for b in balls:
+                    if math.hypot(b.x - mouse_x, b.y - mouse_y) < b.radius:
+                        in_hand_ball = b
+                        is_ball_in_hand = True
+                        break
+            if right and is_ball_in_hand:
+                in_hand_ball.x = mouse_x
+                in_hand_ball.y = mouse_y
+            if not right and is_ball_in_hand:
+                is_ball_in_hand = False
+
+
+
         if paused:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             white_ball = balls[0]
@@ -253,16 +290,11 @@ if __name__ == "__main__":
                 b.move()
             for b in balls:
                 if b.is_in_dong:
-                    if balls.index(b) == 0:
-                        b.x = baix
-                        b.y = baiy
-                        b.vx = 0
-                        b.vy = 0
-                        b.is_in_dong = False
-                        paused = True
-                    else:
-                        in_dong_balls.append(b)
-                        balls.remove(b)
+                    in_dong_balls.append(b)
+                    balls.remove(b)
+                    if b.number == 0:
+                        is_white_ball_in_dong = True
+
 
             for i in range(len(balls)):
                 for j in range(i + 1, len(balls)):
@@ -273,7 +305,7 @@ if __name__ == "__main__":
         screen.fill((52, 125, 0))
         for i in dong:
             pygame.draw.circle(screen, (0, 0, 0), i, dong_radius)
-        pygame.draw.line(screen, (255, 255, 255), (0, HEIGHT+(bar_HEIGHT/2)), (WIDTH, HEIGHT+(bar_HEIGHT/2)), bar_HEIGHT)
+        pygame.draw.line(screen, (104, 104, 104), (0, HEIGHT+(bar_HEIGHT/2)), (WIDTH, HEIGHT+(bar_HEIGHT/2)), bar_HEIGHT)
 
 
         # 绘制方向线（如果正在拖拽球）
@@ -317,7 +349,7 @@ if __name__ == "__main__":
             pause_text = font.render("自由球：请点击任意位置放下白球", True, (255, 100, 100))
             screen.blit(pause_text, (WIDTH // 2 - pause_text.get_width() // 2, 20))
 
-        if actionable:
+        if actionable and not paused:
             action_text = font.render("拖动白球来击球", True, (255, 100, 100))
             screen.blit(action_text, (WIDTH // 2 - action_text.get_width() // 2, 20))
 
