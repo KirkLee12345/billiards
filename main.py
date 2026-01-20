@@ -153,32 +153,71 @@ if __name__ == "__main__":
     balls = []
     in_dong_balls = []
 
+
     baix = 1150
     baiy = 350
     ball1x = 350
     ball1y = 350
 
+    ball_pos = []
+    ball_pos.append((ball1x, ball1y))
+
+    ball_pos.append((ball1x-30, ball1y-18))
+    ball_pos.append((ball1x-30, ball1y+18))
+
+    ball_pos.append((ball1x-60, ball1y-36))
+    ball_pos.append((ball1x-60, ball1y))
+    ball_pos.append((ball1x-60, ball1y+36))
+
+    ball_pos.append((ball1x-90, ball1y-54))
+    ball_pos.append((ball1x-90, ball1y-18))
+    ball_pos.append((ball1x-90, ball1y+18))
+    ball_pos.append((ball1x-90, ball1y+54))
+
+    ball_pos.append((ball1x-120, ball1y-72))
+    ball_pos.append((ball1x-120, ball1y-36))
+    ball_pos.append((ball1x-120, ball1y))
+    ball_pos.append((ball1x-120, ball1y+36))
+    ball_pos.append((ball1x-120, ball1y+72))
+
+    random.shuffle(ball_pos)
+
     balls.append(Ball(color=(255, 255, 255), x=baix, y=baiy, number=0))  # 白球，必须放在第一个
 
-    balls.append(Ball(color=(210, 233, 3), x=ball1x, y=ball1y, number=1))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(210, 233, 3), x=x, y=y, number=1))
 
-    balls.append(Ball(color=(255, 0, 0), x=ball1x-30, y=ball1y-18, number=3))
-    balls.append(Ball(color=(255, 0, 0), x=ball1x-30, y=ball1y+18, number=11, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 0), x=x, y=y, number=3))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 0), x=x, y=y, number=11, is_half=True))
 
-    balls.append(Ball(color=(0, 255, 0), x=ball1x-60, y=ball1y-36, number=14, is_half=True))
-    balls.append(Ball(color=(0, 0, 0), x=ball1x-60, y=ball1y, number=8))
-    balls.append(Ball(color=(0, 255, 0), x=ball1x-60, y=ball1y+36, number=6))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(0, 255, 0), x=x, y=y, number=14, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(0, 0, 0), x=x, y=y, number=8))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(0, 255, 0), x=x, y=y, number=6))
 
-    balls.append(Ball(color=(210, 233, 3), x=ball1x-90, y=ball1y-54, number=2, is_half=True))
-    balls.append(Ball(color=(255, 0, 255), x=ball1x-90, y=ball1y-18, number=4))
-    balls.append(Ball(color=(255, 0, 0), x=ball1x-90, y=ball1y+18, number=15, is_half=True))
-    balls.append(Ball(color=(232, 125, 3), x=ball1x-90, y=ball1y+54, number=13, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(210, 233, 3), x=x, y=y, number=2, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 255), x=x, y=y, number=4))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 0), x=x, y=y, number=15, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(232, 125, 3), x=x, y=y, number=13, is_half=True))
 
-    balls.append(Ball(color=(255, 0, 255), x=ball1x-120, y=ball1y-72, number=12, is_half=True))
-    balls.append(Ball(color=(232, 125, 3), x=ball1x-120, y=ball1y-36, number=5))
-    balls.append(Ball(color=(0, 0, 255), x=ball1x-120, y=ball1y, number=10, is_half=True))
-    balls.append(Ball(color=(0, 0, 255), x=ball1x-120, y=ball1y+36, number=9))
-    balls.append(Ball(color=(255, 0, 0), x=ball1x-120, y=ball1y+72, number=7))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 255), x=x, y=y, number=12, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(232, 125, 3), x=x, y=y, number=5))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(0, 0, 255), x=x, y=y, number=10, is_half=True))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(0, 0, 255), x=x, y=y, number=9))
+    x, y = ball_pos.pop()
+    balls.append(Ball(color=(255, 0, 0), x=x, y=y, number=7))
 
 
     dong = [(0, 0), (0, HEIGHT), (WIDTH, 0), (WIDTH, HEIGHT), (WIDTH / 2, 0), (WIDTH / 2, HEIGHT)]
