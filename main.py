@@ -4,8 +4,8 @@
 作者：KirkLee123 & ktbtn
 创建日期：2026-01-17
 
-版本：V0.1
-最近更新：2026-01-17
+版本：V0.2
+最近更新：2026-01-20
 """
 import copy
 import pygame, random, math
@@ -374,7 +374,7 @@ if __name__ == "__main__":
                 power = min(distance / 10, 50)  # 力度最大值为50
                 vx = power * (end_pos[0] - start_pos[0]) / distance
                 vy = power * (end_pos[1] - start_pos[1]) / distance
-                paths = calculate_predicted_path(white_ball, vx, vy, 120)
+                paths = calculate_predicted_path(white_ball, vx, vy, setting["logical_fps"]*2)
                 for p in paths:
                     pygame.draw.circle(screen, (255, 255, 255), (int(p[0]), int(p[1])), 2)
 
